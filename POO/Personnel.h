@@ -88,6 +88,7 @@ namespace POO {
 		void InitializeComponent(void)
 		{
 			this->components = (gcnew System::ComponentModel::Container());
+			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(Personnel::typeid));
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->label3 = (gcnew System::Windows::Forms::Label());
@@ -164,18 +165,18 @@ namespace POO {
 			this->label5->AutoSize = true;
 			this->label5->Location = System::Drawing::Point(14, 323);
 			this->label5->Name = L"label5";
-			this->label5->Size = System::Drawing::Size(119, 13);
+			this->label5->Size = System::Drawing::Size(113, 13);
 			this->label5->TabIndex = 4;
-			this->label5->Text = L"Suppérieur hiérarchique";
+			this->label5->Text = L"Supérieur hiérarchique";
 			// 
 			// label6
 			// 
 			this->label6->AutoSize = true;
 			this->label6->Location = System::Drawing::Point(14, 357);
 			this->label6->Name = L"label6";
-			this->label6->Size = System::Drawing::Size(98, 13);
+			this->label6->Size = System::Drawing::Size(92, 13);
 			this->label6->TabIndex = 5;
-			this->label6->Text = L"Nom du Suppérieur";
+			this->label6->Text = L"Nom du Supérieur";
 			// 
 			// textBox1
 			// 
@@ -248,9 +249,9 @@ namespace POO {
 			this->label7->AutoSize = true;
 			this->label7->Location = System::Drawing::Point(14, 393);
 			this->label7->Name = L"label7";
-			this->label7->Size = System::Drawing::Size(112, 13);
+			this->label7->Size = System::Drawing::Size(106, 13);
 			this->label7->TabIndex = 16;
-			this->label7->Text = L"Prénom du Suppérieur";
+			this->label7->Text = L"Prénom du Supérieur";
 			// 
 			// button1
 			// 
@@ -284,7 +285,7 @@ namespace POO {
 			this->button2->Name = L"button2";
 			this->button2->Size = System::Drawing::Size(75, 23);
 			this->button2->TabIndex = 22;
-			this->button2->Text = L"Clear BOX";
+			this->button2->Text = L"CLEAR";
 			this->button2->UseVisualStyleBackColor = true;
 			this->button2->Click += gcnew System::EventHandler(this, &Personnel::button2_Click);
 			// 
@@ -391,6 +392,7 @@ namespace POO {
 			this->Controls->Add(this->label3);
 			this->Controls->Add(this->label2);
 			this->Controls->Add(this->label1);
+			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->Name = L"Personnel";
 			this->Text = L"Gestion Personnel";
 			this->Load += gcnew System::EventHandler(this, &Personnel::Personnel_Load);
@@ -443,54 +445,59 @@ namespace POO {
 		String^ constring = "Data Source=(local);Initial Catalog=POO;Integrated Security=True";
 		SqlConnection^ conDataBase = gcnew SqlConnection(constring);
 
-		String^ Nom = textBox1->Text;
-		String^ Prenom = textBox2->Text;
-		String^ Adresse = textBox4->Text;
-		String^ dateEmbauche = textBox3->Text;
+		if (textBox1->Text != "" && textBox2->Text != "" && textBox3->Text != "" && textBox4->Text != "") {
+			String^ Nom = textBox1->Text;
+			String^ Prenom = textBox2->Text;
+			String^ Adresse = textBox4->Text;
+			String^ dateEmbauche = textBox3->Text;
 
-		if (radioButton1->Checked) {
-			SqlCommand^ cmdDataBase = gcnew SqlCommand("INSERT INTO Personnel (Nom, Prenom, Adresse, Date_d_embauche, Supperieur_hierarchique) VALUES('" + Nom + "', '" + Prenom + "', '" + Adresse + "', '" + dateEmbauche + "', 1); ", conDataBase);
-			SqlDataReader^ myReader;
-			try {
+			if (radioButton1->Checked) {
+				SqlCommand^ cmdDataBase = gcnew SqlCommand("INSERT INTO Personnel (Nom, Prenom, Adresse, Date_d_embauche, Supperieur_hierarchique) VALUES('" + Nom + "', '" + Prenom + "', '" + Adresse + "', '" + dateEmbauche + "', 1); ", conDataBase);
+				SqlDataReader^ myReader;
+				try {
 
-				conDataBase->Open();
-				myReader = cmdDataBase->ExecuteReader();
-				conDataBase->Close();
+					conDataBase->Open();
+					myReader = cmdDataBase->ExecuteReader();
+					conDataBase->Close();
 
-				String^ NomP = textBox5->Text;
-				String^ PrenomP = textBox6->Text;
+					String^ NomP = textBox5->Text;
+					String^ PrenomP = textBox6->Text;
 
-				if (textBox5->Text != "" && textBox6->Text != "") {
-					SqlCommand^ cmdDataBase = gcnew SqlCommand("UPDATE Personnel SET Id_Personnel_encadrer = (SELECT ID_Personnel FROM Personnel WHERE Nom = '" + NomP + "' AND Prenom = '" + PrenomP + "') WHERE Nom = '" + Nom + "' AND Prenom = '" + Prenom + "' ", conDataBase);
+					if (textBox5->Text != "" && textBox6->Text != "") {
+						SqlCommand^ cmdDataBase = gcnew SqlCommand("UPDATE Personnel SET Id_Personnel_encadrer = (SELECT ID_Personnel FROM Personnel WHERE Nom = '" + NomP + "' AND Prenom = '" + PrenomP + "') WHERE Nom = '" + Nom + "' AND Prenom = '" + Prenom + "' ", conDataBase);
+						conDataBase->Open();
+						myReader = cmdDataBase->ExecuteReader();
+						MessageBox::Show("Personnel enregistré :'D");
+					}
+					else {
+						MessageBox::Show("Veuillez Remplir le Nom et le Prénom du Supérieur hiérarchique");
+					}
+				}
+				catch (Exception^ ex) {
+
+					MessageBox::Show(ex->Message);
+
+				}
+			}
+			else {
+
+				SqlCommand^ cmdDataBase = gcnew SqlCommand("INSERT INTO Personnel (Nom, Prenom, Adresse, Date_d_embauche, Supperieur_hierarchique) VALUES('" + Nom + "', '" + Prenom + "', '" + Adresse + "', '" + dateEmbauche + "', 0); ", conDataBase);
+				SqlDataReader^ myReader;
+				try {
+
 					conDataBase->Open();
 					myReader = cmdDataBase->ExecuteReader();
 					MessageBox::Show("Personnel enregistré :'D");
 				}
-				else {
-					MessageBox::Show("Veuillez Remplir le Nom et le Prénom du Suppérieur hiérarchique");
+				catch (Exception^ ex) {
+
+					MessageBox::Show(ex->Message);
+
 				}
-			}
-			catch (Exception^ ex) {
-
-				MessageBox::Show(ex->Message);
-
 			}
 		}
 		else {
-
-			SqlCommand^ cmdDataBase = gcnew SqlCommand("INSERT INTO Personnel (Nom, Prenom, Adresse, Date_d_embauche, Supperieur_hierarchique) VALUES('" + Nom + "', '" + Prenom + "', '" + Adresse + "', '" + dateEmbauche + "', 0); ", conDataBase);
-			SqlDataReader^ myReader;
-			try {
-
-				conDataBase->Open();
-				myReader = cmdDataBase->ExecuteReader();
-				MessageBox::Show("Personnel enregistré :'D");
-			}
-			catch (Exception^ ex) {
-
-				MessageBox::Show(ex->Message);
-
-			}
+			MessageBox::Show("Il faut remplir les champs nécessaires");
 		}
 
 	}
@@ -498,66 +505,71 @@ namespace POO {
 		String^ constring = "Data Source=(local);Initial Catalog=POO;Integrated Security=True";
 		SqlConnection^ conDataBase = gcnew SqlConnection(constring);
 
-		if (radioButton1->Checked) {
+		if (textBox1->Text != "" && textBox2->Text != "" && textBox3->Text != "" && textBox4->Text != "") {
+			if (radioButton1->Checked) {
 
-			int ID = Int32::Parse(textBox7->Text);
-			String^ Nom = textBox1->Text;
-			String^ Prenom = textBox2->Text;
-			String^ Adresse = textBox4->Text;
-			String^ dateEmbauche = textBox3->Text;
+				int ID = Int32::Parse(textBox7->Text);
+				String^ Nom = textBox1->Text;
+				String^ Prenom = textBox2->Text;
+				String^ Adresse = textBox4->Text;
+				String^ dateEmbauche = textBox3->Text;
 
-			SqlCommand^ cmdDataBase = gcnew SqlCommand("UPDATE Personnel SET Nom = '" + Nom + "', Prenom = '" + Prenom + "' , Adresse = '" + Adresse + "', Date_d_embauche = '" + dateEmbauche + "', Supperieur_hierarchique = 1 WHERE Id_Personnel = " + ID + " ", conDataBase);
-			SqlDataReader^ myReader;
+				SqlCommand^ cmdDataBase = gcnew SqlCommand("UPDATE Personnel SET Nom = '" + Nom + "', Prenom = '" + Prenom + "' , Adresse = '" + Adresse + "', Date_d_embauche = '" + dateEmbauche + "', Supperieur_hierarchique = 1 WHERE Id_Personnel = " + ID + " ", conDataBase);
+				SqlDataReader^ myReader;
 
-			try {
+				try {
 
-				conDataBase->Open();
-				myReader = cmdDataBase->ExecuteReader();
-				conDataBase->Close();
-
-				String^ NomP = textBox5->Text;
-				String^ PrenomP = textBox6->Text;
-
-				if (textBox5->Text != "" && textBox6->Text != "") {
-					SqlCommand^ cmdDataBase = gcnew SqlCommand("UPDATE Personnel SET Id_Personnel_encadrer = (SELECT ID_Personnel FROM Personnel WHERE Nom = '" + NomP + "' AND Prenom = '" + PrenomP + "') WHERE Nom = '" + Nom + "' AND Prenom = '" + Prenom + "' ", conDataBase);
 					conDataBase->Open();
 					myReader = cmdDataBase->ExecuteReader();
+					conDataBase->Close();
 
-					MessageBox::Show("Personnel modifié :'D");
+					String^ NomP = textBox5->Text;
+					String^ PrenomP = textBox6->Text;
+
+					if (textBox5->Text != "" && textBox6->Text != "") {
+						SqlCommand^ cmdDataBase = gcnew SqlCommand("UPDATE Personnel SET Id_Personnel_encadrer = (SELECT ID_Personnel FROM Personnel WHERE Nom = '" + NomP + "' AND Prenom = '" + PrenomP + "') WHERE Nom = '" + Nom + "' AND Prenom = '" + Prenom + "' ", conDataBase);
+						conDataBase->Open();
+						myReader = cmdDataBase->ExecuteReader();
+
+						MessageBox::Show("Personnel modifié :'D");
+					}
+					else {
+						MessageBox::Show("Veuillez Remplir le Nom et le Prénom du Suppérieur hiérarchique");
+					}
 				}
-				else {
-					MessageBox::Show("Veuillez Remplir le Nom et le Prénom du Suppérieur hiérarchique");
+				catch (Exception^ ex) {
+
+					MessageBox::Show(ex->Message);
+
 				}
 			}
-			catch (Exception^ ex) {
+			else {
+				int ID = Int32::Parse(textBox7->Text);
+				String^ Nom = textBox1->Text;
+				String^ Prenom = textBox2->Text;
+				String^ Adresse = textBox4->Text;
+				String^ dateEmbauche = textBox3->Text;
 
-				MessageBox::Show(ex->Message);
+				SqlCommand^ cmdDataBase = gcnew SqlCommand("UPDATE Personnel SET Nom = '" + Nom + "', Prenom = '" + Prenom + "' , Adresse = '" + Adresse + "', Date_d_embauche = '" + dateEmbauche + "', Supperieur_hierarchique = 0, Id_Personnel_encadrer = NULL WHERE Id_Personnel = " + ID + " ", conDataBase);
+				SqlDataReader^ myReader;
 
+				try {
+
+					conDataBase->Open();
+					myReader = cmdDataBase->ExecuteReader();
+					conDataBase->Close();
+					MessageBox::Show("Personnel modifié :'D");
+
+				}
+				catch (Exception^ ex) {
+
+					MessageBox::Show(ex->Message);
+
+				}
 			}
 		}
 		else {
-			int ID = Int32::Parse(textBox7->Text);
-			String^ Nom = textBox1->Text;
-			String^ Prenom = textBox2->Text;
-			String^ Adresse = textBox4->Text;
-			String^ dateEmbauche = textBox3->Text;
-
-			SqlCommand^ cmdDataBase = gcnew SqlCommand("UPDATE Personnel SET Nom = '" + Nom + "', Prenom = '" + Prenom + "' , Adresse = '" + Adresse + "', Date_d_embauche = '" + dateEmbauche + "', Supperieur_hierarchique = 0, Id_Personnel_encadrer = NULL WHERE Id_Personnel = " + ID + " ", conDataBase);
-			SqlDataReader^ myReader;
-
-			try {
-
-				conDataBase->Open();
-				myReader = cmdDataBase->ExecuteReader();
-				conDataBase->Close();
-				MessageBox::Show("Personnel modifié :'D");
-
-			}
-			catch (Exception^ ex) {
-
-				MessageBox::Show(ex->Message);
-
-			}
+			MessageBox::Show("il faut remplir les champs nécessaires");
 		}
 	}
 	private: System::Void button6_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -740,21 +752,26 @@ private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e
 		String^ constring = "Data Source=(local);Initial Catalog=POO;Integrated Security=True";
 		SqlConnection^ conDataBase = gcnew SqlConnection(constring);
 
-		int ID = Int32::Parse(textBox7->Text);
+		if (textBox7->Text != "") {
 
-		if (MessageBox::Show("Etes-vous sûr de vouloir supprimer le personnel avec l'id " + ID + " ?", "Warning", MessageBoxButtons::YesNo, MessageBoxIcon::Question) == System::Windows::Forms::DialogResult::Yes) {
-			SqlCommand^ cmdDataBase = gcnew SqlCommand("DELETE FROM Personnel WHERE Id_Personnel = " + ID + " ", conDataBase);
+			int ID = Int32::Parse(textBox7->Text);
 
-			conDataBase->Open();
-			SqlDataReader^ myReader = cmdDataBase->ExecuteReader();
-			MessageBox::Show("Personnel supprimé :'D");
-			conDataBase->Close();
+			if (MessageBox::Show("Etes-vous sûr de vouloir supprimer le personnel avec l'id " + ID + " ?", "Warning", MessageBoxButtons::YesNo, MessageBoxIcon::Question) == System::Windows::Forms::DialogResult::Yes) {
+				SqlCommand^ cmdDataBase = gcnew SqlCommand("DELETE FROM Personnel WHERE Id_Personnel = " + ID + " ", conDataBase);
 
+				conDataBase->Open();
+				SqlDataReader^ myReader = cmdDataBase->ExecuteReader();
+				MessageBox::Show("Personnel supprimé :'D");
+				conDataBase->Close();
+
+			}
+			else {
+				MessageBox::Show("Personnel non supprimé");
+			}
 		}
 		else {
-			MessageBox::Show("Personnel non supprimé");
+			MessageBox::Show("Il faut entrer un ID");
 		}
-
 
 }
 private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {

@@ -118,13 +118,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CAD.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="CL_client.cpp" />
+    <ClCompile Include="Commande.cpp" />
     <ClCompile Include="MyForm.cpp" />
     <ClCompile Include="MyForm1.cpp" />
     <ClCompile Include="Personnel.cpp" />
+    <ClCompile Include="Subclient.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CAD.h" />
     <ClInclude Include="Client.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="CL_client.h" />
+    <ClInclude Include="Commande.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="MyForm.h">
@@ -136,10 +145,16 @@
     <ClInclude Include="Personnel.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="Subclient.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Client.resx">
       <DependentUpon>Client.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Commande.resx">
+      <DependentUpon>Commande.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MyForm.resx">
       <DependentUpon>MyForm.h</DependentUpon>
@@ -149,6 +164,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Personnel.resx">
       <DependentUpon>Personnel.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Subclient.resx">
+      <DependentUpon>Subclient.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,5 +1,9 @@
 #pragma once
 
+#include "Commande.h"
+#include "CL_client.h"
+#include "CAD.h"
+
 namespace POO {
 
 	using namespace System;
@@ -60,6 +64,7 @@ namespace POO {
 	private: System::Windows::Forms::BindingSource^ bindingSource1;
 	private: System::Windows::Forms::BindingSource^ bindingSource2;
 	private: System::Windows::Forms::Button^ button6;
+
 	private: System::ComponentModel::IContainer^ components;
 
 	private:
@@ -290,7 +295,7 @@ namespace POO {
 			this->button6->Name = L"button6";
 			this->button6->Size = System::Drawing::Size(75, 23);
 			this->button6->TabIndex = 43;
-			this->button6->Text = L"Clear BOX";
+			this->button6->Text = L"CLEAR";
 			this->button6->UseVisualStyleBackColor = true;
 			this->button6->Click += gcnew System::EventHandler(this, &Client::button6_Click);
 			// 
@@ -342,19 +347,49 @@ namespace POO {
 		String^ datePAchat = textBox5->Text;
 		String^ adresseFac = textBox6->Text;
 		String^ adresseLiv = textBox7->Text;
-		
-		SqlCommand^ cmdDataBase = gcnew SqlCommand("INSERT INTO Client (Nom, Prenom, Date_de_naissance, Date_du_premier_achat, Adresse_Facturation, Adresse_Livraison) VALUES('"+Nom+"', '"+Prenom+"', '"+dateNaissance+"', '"+datePAchat+"', '"+adresseFac+"', '"+adresseLiv+"'); ", conDataBase);
-		SqlDataReader^ myReader;
-		try {
+		if (textBox2->Text != "", textBox3->Text != "", textBox4->Text != "", textBox5->Text != "", textBox6->Text != "", textBox7->Text != "") {
+			if (adresseFac->StartsWith("Alger,") || adresseFac->StartsWith("Oran,") || adresseFac->StartsWith("Constantine,") || adresseFac->StartsWith("Annaba,") || adresseFac->StartsWith("Blida,") ||
+				adresseFac->StartsWith("Batna,") || adresseFac->StartsWith("Djelfa,") || adresseFac->StartsWith("Setif,") || adresseFac->StartsWith("Sidi bel Abbes,") || adresseFac->StartsWith("Biskra,") ||
+				adresseFac->StartsWith("Tebessa,") || adresseFac->StartsWith("El Oued,") || adresseFac->StartsWith("Skikda,") || adresseFac->StartsWith("Tiaret,") || adresseFac->StartsWith("Bejaia,") ||
+				adresseFac->StartsWith("Tlemcen,") || adresseFac->StartsWith("Ouargla,") || adresseFac->StartsWith("Bechar,") || adresseFac->StartsWith("Mostaganem,") || adresseFac->StartsWith("Bordj Bou Arreridj,") ||
+				adresseFac->StartsWith("Chlef,") || adresseFac->StartsWith("Souk Ahras,") || adresseFac->StartsWith("Medea,") || adresseFac->StartsWith("El Eulma,") || adresseFac->StartsWith("Touggourt,") ||
+				adresseFac->StartsWith("Ghardaia,") || adresseFac->StartsWith("Saida,") || adresseFac->StartsWith("Laghouat,") || adresseFac->StartsWith("M'Sila,") || adresseFac->StartsWith("Jijel,") ||
+				adresseFac->StartsWith("Relizane,") || adresseFac->StartsWith("Guelma,") || adresseFac->StartsWith("Ain Beida,") || adresseFac->StartsWith("Khenchela,") || adresseFac->StartsWith("Bousaada,") ||
+				adresseFac->StartsWith("Mascara,") || adresseFac->StartsWith("Tizi Ouzou,")) {
 
-			conDataBase->Open();
-			myReader = cmdDataBase->ExecuteReader();
-			MessageBox::Show("Client enregistré :'D");
+				if (adresseLiv->StartsWith("Alger,") || adresseLiv->StartsWith("Oran,") || adresseLiv->StartsWith("Constantine,") || adresseLiv->StartsWith("Annaba,") || adresseLiv->StartsWith("Blida,") ||
+					adresseLiv->StartsWith("Batna,") || adresseLiv->StartsWith("Djelfa,") || adresseLiv->StartsWith("Setif,") || adresseLiv->StartsWith("Sidi bel Abbes,") || adresseLiv->StartsWith("Biskra,") ||
+					adresseLiv->StartsWith("Tebessa,") || adresseLiv->StartsWith("El Oued,") || adresseLiv->StartsWith("Skikda,") || adresseLiv->StartsWith("Tiaret,") || adresseLiv->StartsWith("Bejaia,") ||
+					adresseLiv->StartsWith("Tlemcen,") || adresseLiv->StartsWith("Ouargla,") || adresseLiv->StartsWith("Bechar,") || adresseLiv->StartsWith("Mostaganem,") || adresseLiv->StartsWith("Bordj Bou Arreridj,") ||
+					adresseLiv->StartsWith("Chlef,") || adresseLiv->StartsWith("Souk Ahras,") || adresseLiv->StartsWith("Medea,") || adresseLiv->StartsWith("El Eulma,") || adresseLiv->StartsWith("Touggourt,") ||
+					adresseLiv->StartsWith("Ghardaia,") || adresseLiv->StartsWith("Saida,") || adresseLiv->StartsWith("Laghouat,") || adresseLiv->StartsWith("M'Sila,") || adresseLiv->StartsWith("Jijel,") ||
+					adresseLiv->StartsWith("Relizane,") || adresseLiv->StartsWith("Guelma,") || adresseLiv->StartsWith("Ain Beida,") || adresseLiv->StartsWith("Khenchela,") || adresseLiv->StartsWith("Bousaada,") ||
+					adresseLiv->StartsWith("Mascara,") || adresseLiv->StartsWith("Tizi Ouzou,")) {
+
+					SqlCommand^ cmdDataBase = gcnew SqlCommand("INSERT INTO Client (Nom, Prenom, Date_de_naissance, Date_du_premier_achat, Adresse_Facturation, Adresse_Livraison) VALUES('" + Nom + "', '" + Prenom + "', '" + dateNaissance + "', '" + datePAchat + "', '" + adresseFac + "', '" + adresseLiv + "'); ", conDataBase);
+					SqlDataReader^ myReader;
+					try {
+
+						conDataBase->Open();
+						myReader = cmdDataBase->ExecuteReader();
+						MessageBox::Show("Client enregistré :'D");
+					}
+					catch (Exception^ ex) {
+
+						MessageBox::Show(ex->Message);
+
+					}
+				}
+				else {
+					MessageBox::Show("Adresse invalide, veuillez écrire l'adresse en suivant ce format : {Ville},{Autres infos}");
+				}
+			}
+			else {
+				MessageBox::Show("Adresse invalide, veuillez écrire l'adresse en suivant ce format : {Ville},{Autres infos}");
+			}
 		}
-		catch (Exception^ ex) {
-
-			MessageBox::Show(ex->Message);
-
+		else {
+			MessageBox::Show("Il faut remplir tout les champs");
 		}
 	}
 private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -372,27 +407,58 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 	String^ constring = "Data Source=(local);Initial Catalog=POO;Integrated Security=True";
 	SqlConnection^ conDataBase = gcnew SqlConnection(constring);
 
-	int ID = Int32::Parse(textBox1->Text);
-	String^ Nom = textBox2->Text;
-	String^ Prenom = textBox3->Text;
-	String^ dateNaissance = textBox4->Text;
-	String^ datePAchat = textBox5->Text;
-	String^ adresseFac = textBox6->Text;
-	String^ adresseLiv = textBox7->Text;
+	if (textBox2->Text != "" && textBox3->Text != "" && textBox4->Text != "" && textBox5->Text != "" && textBox6->Text != "" && textBox7->Text != "") {
+		int ID = Int32::Parse(textBox1->Text);
+		String^ Nom = textBox2->Text;
+		String^ Prenom = textBox3->Text;
+		String^ dateNaissance = textBox4->Text;
+		String^ datePAchat = textBox5->Text;
+		String^ adresseFac = textBox6->Text;
+		String^ adresseLiv = textBox7->Text;
 
-	SqlCommand^ cmdDataBase = gcnew SqlCommand("UPDATE Client SET Nom = '"+Nom+"', Prenom = '"+Prenom+"' , Date_de_naissance = '"+ dateNaissance +"', Date_du_premier_achat = '"+datePAchat+"', Adresse_Facturation = '"+adresseFac+"' , Adresse_Livraison = '"+adresseLiv+"' WHERE Id_Client = "+ID+" ", conDataBase);
-	SqlDataReader^ myReader;
-	try {
+			if (adresseFac->StartsWith("Alger,") || adresseFac->StartsWith("Oran,") || adresseFac->StartsWith("Constantine,") || adresseFac->StartsWith("Annaba,") || adresseFac->StartsWith("Blida,") ||
+				adresseFac->StartsWith("Batna,") || adresseFac->StartsWith("Djelfa,") || adresseFac->StartsWith("Setif,") || adresseFac->StartsWith("Sidi bel Abbes,") || adresseFac->StartsWith("Biskra,") ||
+				adresseFac->StartsWith("Tebessa,") || adresseFac->StartsWith("El Oued,") || adresseFac->StartsWith("Skikda,") || adresseFac->StartsWith("Tiaret,") || adresseFac->StartsWith("Bejaia,") ||
+				adresseFac->StartsWith("Tlemcen,") || adresseFac->StartsWith("Ouargla,") || adresseFac->StartsWith("Bechar,") || adresseFac->StartsWith("Mostaganem,") || adresseFac->StartsWith("Bordj Bou Arreridj,") ||
+				adresseFac->StartsWith("Chlef,") || adresseFac->StartsWith("Souk Ahras,") || adresseFac->StartsWith("Medea,") || adresseFac->StartsWith("El Eulma,") || adresseFac->StartsWith("Touggourt,") ||
+				adresseFac->StartsWith("Ghardaia,") || adresseFac->StartsWith("Saida,") || adresseFac->StartsWith("Laghouat,") || adresseFac->StartsWith("M'Sila,") || adresseFac->StartsWith("Jijel,") ||
+				adresseFac->StartsWith("Relizane,") || adresseFac->StartsWith("Guelma,") || adresseFac->StartsWith("Ain Beida,") || adresseFac->StartsWith("Khenchela,") || adresseFac->StartsWith("Bousaada,") ||
+				adresseFac->StartsWith("Mascara,") || adresseFac->StartsWith("Tizi Ouzou,")) {
 
-		conDataBase->Open();
-		myReader = cmdDataBase->ExecuteReader();
-		MessageBox::Show("Client modifié :'D");
-		conDataBase->Close();
+				if (adresseLiv->StartsWith("Alger,") || adresseLiv->StartsWith("Oran,") || adresseLiv->StartsWith("Constantine,") || adresseLiv->StartsWith("Annaba,") || adresseLiv->StartsWith("Blida,") ||
+					adresseLiv->StartsWith("Batna,") || adresseLiv->StartsWith("Djelfa,") || adresseLiv->StartsWith("Setif,") || adresseLiv->StartsWith("Sidi bel Abbes,") || adresseLiv->StartsWith("Biskra,") ||
+					adresseLiv->StartsWith("Tebessa,") || adresseLiv->StartsWith("El Oued,") || adresseLiv->StartsWith("Skikda,") || adresseLiv->StartsWith("Tiaret,") || adresseLiv->StartsWith("Bejaia,") ||
+					adresseLiv->StartsWith("Tlemcen,") || adresseLiv->StartsWith("Ouargla,") || adresseLiv->StartsWith("Bechar,") || adresseLiv->StartsWith("Mostaganem,") || adresseLiv->StartsWith("Bordj Bou Arreridj,") ||
+					adresseLiv->StartsWith("Chlef,") || adresseLiv->StartsWith("Souk Ahras,") || adresseLiv->StartsWith("Medea,") || adresseLiv->StartsWith("El Eulma,") || adresseLiv->StartsWith("Touggourt,") ||
+					adresseLiv->StartsWith("Ghardaia,") || adresseLiv->StartsWith("Saida,") || adresseLiv->StartsWith("Laghouat,") || adresseLiv->StartsWith("M'Sila,") || adresseLiv->StartsWith("Jijel,") ||
+					adresseLiv->StartsWith("Relizane,") || adresseLiv->StartsWith("Guelma,") || adresseLiv->StartsWith("Ain Beida,") || adresseLiv->StartsWith("Khenchela,") || adresseLiv->StartsWith("Bousaada,") ||
+					adresseLiv->StartsWith("Mascara,") || adresseLiv->StartsWith("Tizi Ouzou,")) {
+
+					SqlCommand^ cmdDataBase = gcnew SqlCommand("UPDATE Client SET Nom = '" + Nom + "', Prenom = '" + Prenom + "' , Date_de_naissance = '" + dateNaissance + "', Date_du_premier_achat = '" + datePAchat + "', Adresse_Facturation = '" + adresseFac + "' , Adresse_Livraison = '" + adresseLiv + "' WHERE Id_Client = " + ID + " ", conDataBase);
+					SqlDataReader^ myReader;
+					try {
+
+						conDataBase->Open();
+						myReader = cmdDataBase->ExecuteReader();
+						MessageBox::Show("Client modifié :'D");
+						conDataBase->Close();
+					}
+					catch (Exception^ ex) {
+
+						MessageBox::Show(ex->Message);
+
+					}
+				}
+				else {
+					MessageBox::Show("Adresse invalide, veuillez écrire l'adresse en suivant ce format : {Ville},{Autres infos}");
+				}
+			}
+			else {
+				MessageBox::Show("Adresse invalide, veuillez écrire l'adresse en suivant ce format : {Ville},{Autres infos}");
+			}
 	}
-	catch (Exception^ ex) {
-
-		MessageBox::Show(ex->Message);
-
+	else {
+		MessageBox::Show("Il faut remplir tout les champs");
 	}
 }
 private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -400,7 +466,7 @@ private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e
 	SqlConnection^ conDataBase = gcnew SqlConnection(constring);
 	if (textBox1->Text != "") {
 		int ID = Int32::Parse(textBox1->Text);
-		SqlCommand^ cmdDataBase = gcnew SqlCommand("SELECT * FROM Client WHERE Id_Client = "+ID+" ", conDataBase);
+		SqlCommand^ cmdDataBase = gcnew SqlCommand("SELECT * FROM Client WHERE Id_Client = " + ID + " ", conDataBase);
 
 		conDataBase->Open();
 		SqlDataReader^ myReader = cmdDataBase->ExecuteReader();
@@ -416,7 +482,6 @@ private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e
 			textBox5->Text = Convert::ToString(myReader->GetDateTime(4));
 			textBox6->Text = myReader->GetString(5);
 			textBox7->Text = myReader->GetString(6);
-
 		}
 
 		myReader->Close();
@@ -495,6 +560,7 @@ private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e
 	String^ constring = "Data Source=(local);Initial Catalog=POO;Integrated Security=True";
 	SqlConnection^ conDataBase = gcnew SqlConnection(constring);
 
+	if(textBox1->Text != ""){
 	int ID = Int32::Parse(textBox1->Text);
 	SqlCommand^ cmdDataBase = gcnew SqlCommand("DELETE FROM Client WHERE Id_Client = " + ID + " ", conDataBase);
 
@@ -502,6 +568,10 @@ private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e
 	SqlDataReader^ myReader = cmdDataBase->ExecuteReader();
 	MessageBox::Show("Client supprimé :'D");
 	conDataBase->Close();
+	}
+	else {
+		MessageBox::Show("Il faut remplir l'ID d'un Client");
+	}
 }
 private: System::Void button6_Click(System::Object^ sender, System::EventArgs^ e) {
 	textBox1->Text = "";

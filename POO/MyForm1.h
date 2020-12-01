@@ -333,7 +333,7 @@ namespace POO {
 			this->button6->Name = L"button6";
 			this->button6->Size = System::Drawing::Size(75, 23);
 			this->button6->TabIndex = 25;
-			this->button6->Text = L"Clear BOX";
+			this->button6->Text = L"CLEAR";
 			this->button6->UseVisualStyleBackColor = true;
 			this->button6->Click += gcnew System::EventHandler(this, &MyForm1::button6_Click);
 			// 
@@ -384,28 +384,33 @@ namespace POO {
 		String^ constring = "Data Source=(local);Initial Catalog=POO;Integrated Security=True";
 		SqlConnection^ conDataBase = gcnew SqlConnection(constring);
 
-		String^ reference = textBox1->Text;
-		String^ designation = textBox2->Text;
-		int quantite = Int32::Parse(textBox5->Text);
-		double montant_ht = double::Parse(textBox6->Text);
-		double montant_tva = double::Parse(textBox7->Text);
-		double montant_ttc = double::Parse(textBox3->Text);
-		int seuil = Int32::Parse(textBox9->Text);
-		String^ nature = textBox8->Text;
-		String^ couleur = textBox4->Text;
+		if (textBox1->Text != "", textBox2->Text != "", textBox5->Text != "", textBox6->Text != "", textBox7->Text != "", textBox3->Text != "", textBox9->Text != "", textBox8->Text != "", textBox4->Text != "") {
+			String^ reference = textBox1->Text;
+			String^ designation = textBox2->Text;
+			int quantite = Int32::Parse(textBox5->Text);
+			double montant_ht = double::Parse(textBox6->Text);
+			double montant_tva = double::Parse(textBox7->Text);
+			double montant_ttc = double::Parse(textBox3->Text);
+			int seuil = Int32::Parse(textBox9->Text);
+			String^ nature = textBox8->Text;
+			String^ couleur = textBox4->Text;
 
-		SqlCommand^ cmdDataBase = gcnew SqlCommand("INSERT INTO Article (reference_article,designation,Quantite,Montant_HT,Montant_TVA,Montant_TTC, seuil_de_reapprovisionnement, Nature_De_L_article, Couleur_de_l_article) VALUES('"+reference+"', '"+designation+"', "+quantite+", "+montant_ht+", "+montant_tva+", "+montant_ttc+", "+seuil+", '"+nature+"', '"+couleur+"'); ", conDataBase);
-		SqlDataReader^ myReader;
-		try {
+			SqlCommand^ cmdDataBase = gcnew SqlCommand("INSERT INTO Article (reference_article,designation,Quantite,Montant_HT,Montant_TVA,Montant_TTC, seuil_de_reapprovisionnement, Nature_De_L_article, Couleur_de_l_article) VALUES('" + reference + "', '" + designation + "', " + quantite + ", " + montant_ht + ", " + montant_tva + ", " + montant_ttc + ", " + seuil + ", '" + nature + "', '" + couleur + "'); ", conDataBase);
+			SqlDataReader^ myReader;
+			try {
 
-			conDataBase->Open();
-			myReader = cmdDataBase->ExecuteReader();
-			MessageBox::Show("Article enregistré :'D");
+				conDataBase->Open();
+				myReader = cmdDataBase->ExecuteReader();
+				MessageBox::Show("Article enregistré :'D");
+			}
+			catch (Exception^ ex) {
+
+				MessageBox::Show(ex->Message);
+
+			}
 		}
-		catch (Exception^ ex) {
-
-			MessageBox::Show(ex->Message);
-
+		else {
+			MessageBox::Show("Il faut remplir tout les champs nécessaires");
 		}
 	}
 private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -422,77 +427,121 @@ private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e
 }
 private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
 
-	String^ reference = textBox1->Text;
-	String^ constring = "Data Source=(local);Initial Catalog=POO;Integrated Security=True";
-	SqlConnection^ conDataBase = gcnew SqlConnection(constring);
-	SqlCommand^ cmdDataBase = gcnew SqlCommand("SELECT * FROM Article WHERE reference_article = '" + reference +"' ", conDataBase );
-	conDataBase->Open();
-	SqlDataReader^ myReader = cmdDataBase->ExecuteReader();
+	if (textBox1->Text != "") {
+		String^ reference = textBox1->Text;
+		String^ constring = "Data Source=(local);Initial Catalog=POO;Integrated Security=True";
+		SqlConnection^ conDataBase = gcnew SqlConnection(constring);
+		SqlCommand^ cmdDataBase = gcnew SqlCommand("SELECT * FROM Article WHERE reference_article = '" + reference + "' ", conDataBase);
+		conDataBase->Open();
+		SqlDataReader^ myReader = cmdDataBase->ExecuteReader();
 
-	dataGridView1->Hide();
-	dataGridView2->Show();
+		dataGridView1->Hide();
+		dataGridView2->Show();
 
-	while (myReader->Read()) {
-		textBox2->Text = myReader->GetString(1);
-		textBox5->Text = Convert::ToString(myReader->GetInt32(2));
-		textBox6->Text = Convert::ToString(myReader->GetDouble(3));
-		textBox7->Text = Convert::ToString(myReader->GetDouble(4));
-		textBox3->Text = Convert::ToString(myReader->GetDouble(5));
-		textBox9->Text = Convert::ToString(myReader->GetInt32(6));
-		textBox8->Text = myReader->GetString(7);
-		textBox4->Text = myReader->GetString(8);
+		while (myReader->Read()) {
+			textBox2->Text = myReader->GetString(1);
+			textBox5->Text = Convert::ToString(myReader->GetInt32(2));
+			textBox6->Text = Convert::ToString(myReader->GetDouble(3));
+			textBox7->Text = Convert::ToString(myReader->GetDouble(4));
+			textBox3->Text = Convert::ToString(myReader->GetDouble(5));
+			textBox9->Text = Convert::ToString(myReader->GetInt32(6));
+			textBox8->Text = myReader->GetString(7);
+			textBox4->Text = myReader->GetString(8);
+		}
+
+		myReader->Close();
+		SqlDataAdapter^ adapter = gcnew SqlDataAdapter("SELECT * FROM Article WHERE reference_article = '" + reference + "' ", conDataBase);
+		DataTable^ data = gcnew DataTable();
+		data->Clear();
+		adapter->Fill(data);
+		bindingSource2->DataSource = data;
+		dataGridView2->DataSource = bindingSource2;
 	}
+	else if (textBox2->Text != "") {
+		String^ designation = textBox2->Text;
+		String^ constring = "Data Source=(local);Initial Catalog=POO;Integrated Security=True";
+		SqlConnection^ conDataBase = gcnew SqlConnection(constring);
+		SqlCommand^ cmdDataBase = gcnew SqlCommand("SELECT * FROM Article WHERE designation = '" + designation + "' ", conDataBase);
+		conDataBase->Open();
+		SqlDataReader^ myReader = cmdDataBase->ExecuteReader();
 
-	myReader->Close();
-	SqlDataAdapter^ adapter = gcnew SqlDataAdapter("SELECT * FROM Article WHERE reference_article = '" + reference + "' ", conDataBase);
-	DataTable^ data = gcnew DataTable();
-	data->Clear();
-	adapter->Fill(data);
-	bindingSource2->DataSource = data;
-	dataGridView2->DataSource = bindingSource2;
+		dataGridView1->Hide();
+		dataGridView2->Show();
+
+		while (myReader->Read()) {
+			textBox1->Text = myReader->GetString(0);
+			textBox5->Text = Convert::ToString(myReader->GetInt32(2));
+			textBox6->Text = Convert::ToString(myReader->GetDouble(3));
+			textBox7->Text = Convert::ToString(myReader->GetDouble(4));
+			textBox3->Text = Convert::ToString(myReader->GetDouble(5));
+			textBox9->Text = Convert::ToString(myReader->GetInt32(6));
+			textBox8->Text = myReader->GetString(7);
+			textBox4->Text = myReader->GetString(8);
+		}
+
+		myReader->Close();
+		SqlDataAdapter^ adapter = gcnew SqlDataAdapter("SELECT * FROM Article WHERE designation = '" + designation + "' ", conDataBase);
+		DataTable^ data = gcnew DataTable();
+		data->Clear();
+		adapter->Fill(data);
+		bindingSource2->DataSource = data;
+		dataGridView2->DataSource = bindingSource2;
+	}
+	else {
+		MessageBox::Show("Il faut remplir l'ID ou le nom d'un Article");
+	}
 
 }
 private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
 	String^ constring = "Data Source=(local);Initial Catalog=POO;Integrated Security=True";
 	SqlConnection^ conDataBase = gcnew SqlConnection(constring);
 
-	String^ reference = textBox1->Text;
-	String^ designation = textBox2->Text;
-	int quantite = Int32::Parse(textBox5->Text);
-	double montant_ht = double::Parse(textBox6->Text);
-	double montant_tva = double::Parse(textBox7->Text);
-	double montant_ttc = double::Parse(textBox3->Text);
-	int seuil = Int32::Parse(textBox9->Text);
-	String^ nature = textBox8->Text;
-	String^ couleur = textBox4->Text;
+	if (textBox1->Text != "", textBox2->Text != "", textBox5->Text != "", textBox6->Text != "", textBox7->Text != "", textBox3->Text != "", textBox9->Text != "", textBox8->Text != "", textBox4->Text != "") {
+		String^ reference = textBox1->Text;
+		String^ designation = textBox2->Text;
+		int quantite = Int32::Parse(textBox5->Text);
+		double montant_ht = double::Parse(textBox6->Text);
+		double montant_tva = double::Parse(textBox7->Text);
+		double montant_ttc = double::Parse(textBox3->Text);
+		int seuil = Int32::Parse(textBox9->Text);
+		String^ nature = textBox8->Text;
+		String^ couleur = textBox4->Text;
 
-	SqlCommand^ cmdDataBase = gcnew SqlCommand("UPDATE Article SET designation = '"+designation+"', Quantite = "+quantite+", Montant_HT = "+montant_ht+", Montant_TVA = "+montant_tva+", Montant_TTC = "+montant_ttc+", seuil_de_reapprovisionnement = "+seuil+", Nature_De_L_article = '"+nature+"', Couleur_de_l_article = '"+couleur+"' WHERE reference_article = '"+reference+"' " , conDataBase);
-	SqlDataReader^ myReader;
-	try {
+		SqlCommand^ cmdDataBase = gcnew SqlCommand("UPDATE Article SET designation = '" + designation + "', Quantite = " + quantite + ", Montant_HT = " + montant_ht + ", Montant_TVA = " + montant_tva + ", Montant_TTC = " + montant_ttc + ", seuil_de_reapprovisionnement = " + seuil + ", Nature_De_L_article = '" + nature + "', Couleur_de_l_article = '" + couleur + "' WHERE reference_article = '" + reference + "' ", conDataBase);
+		SqlDataReader^ myReader;
+		try {
 
-		conDataBase->Open();
-		myReader = cmdDataBase->ExecuteReader();
-		MessageBox::Show("Article modifié :'D");
-		conDataBase->Close();
+			conDataBase->Open();
+			myReader = cmdDataBase->ExecuteReader();
+			MessageBox::Show("Article modifié :'D");
+			conDataBase->Close();
+		}
+		catch (Exception^ ex) {
+
+			MessageBox::Show(ex->Message);
+
+		}
 	}
-	catch (Exception^ ex) {
-
-		MessageBox::Show(ex->Message);
-
+	else {
+		MessageBox::Show("Il faut remplir tout les champs nécessaires");
 	}
 }
 private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
 	String^ constring = "Data Source=(local);Initial Catalog=POO;Integrated Security=True";
 	SqlConnection^ conDataBase = gcnew SqlConnection(constring);
 
-	String^ reference = textBox1->Text;
-	SqlCommand^ cmdDataBase = gcnew SqlCommand("DELETE FROM Article WHERE reference_article = '" + reference + "' ", conDataBase);
-	
-	conDataBase->Open();
-	SqlDataReader^ myReader = cmdDataBase->ExecuteReader();
-	MessageBox::Show("Article supprimé :'D");
-	conDataBase->Close();
+	if (textBox1->Text != "") {
+		String^ reference = textBox1->Text;
+		SqlCommand^ cmdDataBase = gcnew SqlCommand("DELETE FROM Article WHERE reference_article = '" + reference + "' ", conDataBase);
 
+		conDataBase->Open();
+		SqlDataReader^ myReader = cmdDataBase->ExecuteReader();
+		MessageBox::Show("Article supprimé :'D");
+		conDataBase->Close();
+	}
+	else {
+		MessageBox::Show("Il faut entrer une réference");
+	}
 }
 
 private: System::Void button6_Click(System::Object^ sender, System::EventArgs^ e) {
