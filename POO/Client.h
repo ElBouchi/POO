@@ -465,32 +465,18 @@ private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e
 	String^ constring = "Data Source=(local);Initial Catalog=POO;Integrated Security=True";
 	SqlConnection^ conDataBase = gcnew SqlConnection(constring);
 	if (textBox1->Text != "") {
-		int ID = Int32::Parse(textBox1->Text);
-		SqlCommand^ cmdDataBase = gcnew SqlCommand("SELECT * FROM Client WHERE Id_Client = " + ID + " ", conDataBase);
-
-		conDataBase->Open();
-		SqlDataReader^ myReader = cmdDataBase->ExecuteReader();
+		CAD client;
+		CL_client Sclient;
+		Sclient.setID(Int32::Parse(textBox1->Text));
+		
+		client.requete(Sclient.AFFICHER());
 
 		dataGridView1->Hide();
 		dataGridView2->Show();
 
-		while (myReader->Read()) {
-			textBox1->Text = Convert::ToString(myReader->GetInt32(0));
-			textBox2->Text = myReader->GetString(1);
-			textBox3->Text = myReader->GetString(2);
-			textBox4->Text = Convert::ToString(myReader->GetDateTime(3));
-			textBox5->Text = Convert::ToString(myReader->GetDateTime(4));
-			textBox6->Text = myReader->GetString(5);
-			textBox7->Text = myReader->GetString(6);
-		}
+		client.readClient(textBox1, textBox2, textBox3, textBox4, textBox5, textBox6, textBox7);
 
-		myReader->Close();
-		SqlDataAdapter^ adapter = gcnew SqlDataAdapter("SELECT * FROM Client WHERE Id_Client = " + ID + " ", conDataBase);
-		DataTable^ data = gcnew DataTable();
-		data->Clear();
-		adapter->Fill(data);
-		bindingSource2->DataSource = data;
-		dataGridView2->DataSource = bindingSource2;
+		client.datagrid(Sclient.AFFICHER(), bindingSource2, dataGridView2);
 	}
 	else if(textBox2->Text != ""){
 		String^ Nom = textBox2->Text;
@@ -527,7 +513,7 @@ private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e
 
 		conDataBase->Open();
 		SqlDataReader^ myReader = cmdDataBase->ExecuteReader();
-
+		conDataBase->Close();
 		dataGridView1->Hide();
 		dataGridView2->Show();
 

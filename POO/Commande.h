@@ -76,6 +76,7 @@ namespace POO {
 	private: System::Windows::Forms::TextBox^ textBox14;
 	private: System::Windows::Forms::BindingSource^ bindingSource1;
 	private: System::Windows::Forms::BindingSource^ bindingSource2;
+	private: System::Windows::Forms::Button^ button7;
 	private: System::ComponentModel::IContainer^ components;
 
 
@@ -131,6 +132,7 @@ namespace POO {
 			this->textBox14 = (gcnew System::Windows::Forms::TextBox());
 			this->bindingSource1 = (gcnew System::Windows::Forms::BindingSource(this->components));
 			this->bindingSource2 = (gcnew System::Windows::Forms::BindingSource(this->components));
+			this->button7 = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView2))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->bindingSource1))->BeginInit();
@@ -419,11 +421,21 @@ namespace POO {
 			this->textBox14->Size = System::Drawing::Size(100, 20);
 			this->textBox14->TabIndex = 33;
 			// 
+			// button7
+			// 
+			this->button7->Location = System::Drawing::Point(63, 458);
+			this->button7->Name = L"button7";
+			this->button7->Size = System::Drawing::Size(111, 39);
+			this->button7->TabIndex = 34;
+			this->button7->Text = L"Panier";
+			this->button7->UseVisualStyleBackColor = true;
+			// 
 			// Commande
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1094, 581);
+			this->Controls->Add(this->button7);
 			this->Controls->Add(this->textBox14);
 			this->Controls->Add(this->textBox13);
 			this->Controls->Add(this->ntextBox12);
