@@ -121,10 +121,21 @@
     <ClCompile Include="CAD.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="CL_client.cpp" />
+    <ClCompile Include="CL_Commande.cpp" />
+    <ClCompile Include="CL_Contient.cpp" />
+    <ClCompile Include="CL_Personnel.cpp" />
+    <ClCompile Include="CL_Stock.cpp" />
     <ClCompile Include="Commande.cpp" />
+    <ClCompile Include="Gestion_Client.cpp" />
+    <ClCompile Include="Gestion_Commande.cpp" />
+    <ClCompile Include="Gestion_Contient.cpp" />
+    <ClCompile Include="Gestion_Personnel.cpp" />
+    <ClCompile Include="Gestion_Stock.cpp" />
     <ClCompile Include="MyForm.cpp" />
     <ClCompile Include="MyForm1.cpp" />
+    <ClCompile Include="Panier.cpp" />
     <ClCompile Include="Personnel.cpp" />
+    <ClCompile Include="Qtarticle.cpp" />
     <ClCompile Include="Subclient.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -133,16 +144,31 @@
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="CL_client.h" />
+    <ClInclude Include="CL_Commande.h" />
+    <ClInclude Include="CL_Contient.h" />
+    <ClInclude Include="CL_Personnel.h" />
+    <ClInclude Include="CL_Stock.h" />
     <ClInclude Include="Commande.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="Gestion_Client.h" />
+    <ClInclude Include="Gestion_Commande.h" />
+    <ClInclude Include="Gestion_Contient.h" />
+    <ClInclude Include="Gestion_Personnel.h" />
+    <ClInclude Include="Gestion_Stock.h" />
     <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="MyForm1.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="Panier.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="Personnel.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="Qtarticle.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="Subclient.h">
@@ -162,8 +188,14 @@
     <EmbeddedResource Include="MyForm1.resx">
       <DependentUpon>MyForm1.h</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Panier.resx">
+      <DependentUpon>Panier.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Personnel.resx">
       <DependentUpon>Personnel.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Qtarticle.resx">
+      <DependentUpon>Qtarticle.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Subclient.resx">
       <DependentUpon>Subclient.h</DependentUpon>

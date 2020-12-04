@@ -1,8 +1,7 @@
 #pragma once
 
 #include "Commande.h"
-#include "CL_client.h"
-#include "CAD.h"
+#include "Gestion_Client.h"
 
 namespace POO {
 
@@ -338,16 +337,9 @@ namespace POO {
 		}
 #pragma endregion
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-		String^ constring = "Data Source=(local);Initial Catalog=POO;Integrated Security=True";
-		SqlConnection^ conDataBase = gcnew SqlConnection(constring);
-
-		String^ Nom = textBox2->Text;
-		String^ Prenom = textBox3->Text;
-		String^ dateNaissance = textBox4->Text;
-		String^ datePAchat = textBox5->Text;
 		String^ adresseFac = textBox6->Text;
 		String^ adresseLiv = textBox7->Text;
-		if (textBox2->Text != "", textBox3->Text != "", textBox4->Text != "", textBox5->Text != "", textBox6->Text != "", textBox7->Text != "") {
+		if (textBox2->Text != "" && textBox3->Text != "" && textBox4->Text != "" && textBox5->Text != "" && textBox6->Text != "" && textBox7->Text != "") {
 			if (adresseFac->StartsWith("Alger,") || adresseFac->StartsWith("Oran,") || adresseFac->StartsWith("Constantine,") || adresseFac->StartsWith("Annaba,") || adresseFac->StartsWith("Blida,") ||
 				adresseFac->StartsWith("Batna,") || adresseFac->StartsWith("Djelfa,") || adresseFac->StartsWith("Setif,") || adresseFac->StartsWith("Sidi bel Abbes,") || adresseFac->StartsWith("Biskra,") ||
 				adresseFac->StartsWith("Tebessa,") || adresseFac->StartsWith("El Oued,") || adresseFac->StartsWith("Skikda,") || adresseFac->StartsWith("Tiaret,") || adresseFac->StartsWith("Bejaia,") ||
@@ -366,12 +358,11 @@ namespace POO {
 					adresseLiv->StartsWith("Relizane,") || adresseLiv->StartsWith("Guelma,") || adresseLiv->StartsWith("Ain Beida,") || adresseLiv->StartsWith("Khenchela,") || adresseLiv->StartsWith("Bousaada,") ||
 					adresseLiv->StartsWith("Mascara,") || adresseLiv->StartsWith("Tizi Ouzou,")) {
 
-					SqlCommand^ cmdDataBase = gcnew SqlCommand("INSERT INTO Client (Nom, Prenom, Date_de_naissance, Date_du_premier_achat, Adresse_Facturation, Adresse_Livraison) VALUES('" + Nom + "', '" + Prenom + "', '" + dateNaissance + "', '" + datePAchat + "', '" + adresseFac + "', '" + adresseLiv + "'); ", conDataBase);
-					SqlDataReader^ myReader;
 					try {
+						NS_SVC::Gestion_Client^ client = gcnew NS_SVC::Gestion_Client;
 
-						conDataBase->Open();
-						myReader = cmdDataBase->ExecuteReader();
+						client->ajouter(textBox2->Text, textBox3->Text, textBox4->Text, textBox5->Text, adresseFac, adresseLiv);
+
 						MessageBox::Show("Client enregistré :'D");
 					}
 					catch (Exception^ ex) {
@@ -408,11 +399,6 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 	SqlConnection^ conDataBase = gcnew SqlConnection(constring);
 
 	if (textBox2->Text != "" && textBox3->Text != "" && textBox4->Text != "" && textBox5->Text != "" && textBox6->Text != "" && textBox7->Text != "") {
-		int ID = Int32::Parse(textBox1->Text);
-		String^ Nom = textBox2->Text;
-		String^ Prenom = textBox3->Text;
-		String^ dateNaissance = textBox4->Text;
-		String^ datePAchat = textBox5->Text;
 		String^ adresseFac = textBox6->Text;
 		String^ adresseLiv = textBox7->Text;
 
@@ -434,12 +420,11 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 					adresseLiv->StartsWith("Relizane,") || adresseLiv->StartsWith("Guelma,") || adresseLiv->StartsWith("Ain Beida,") || adresseLiv->StartsWith("Khenchela,") || adresseLiv->StartsWith("Bousaada,") ||
 					adresseLiv->StartsWith("Mascara,") || adresseLiv->StartsWith("Tizi Ouzou,")) {
 
-					SqlCommand^ cmdDataBase = gcnew SqlCommand("UPDATE Client SET Nom = '" + Nom + "', Prenom = '" + Prenom + "' , Date_de_naissance = '" + dateNaissance + "', Date_du_premier_achat = '" + datePAchat + "', Adresse_Facturation = '" + adresseFac + "' , Adresse_Livraison = '" + adresseLiv + "' WHERE Id_Client = " + ID + " ", conDataBase);
-					SqlDataReader^ myReader;
 					try {
+						NS_SVC::Gestion_Client^ client = gcnew NS_SVC::Gestion_Client;
 
-						conDataBase->Open();
-						myReader = cmdDataBase->ExecuteReader();
+						client->modifier(Int32::Parse(textBox1->Text), textBox2->Text, textBox3->Text, textBox4->Text, textBox5->Text, adresseFac, adresseLiv);
+						
 						MessageBox::Show("Client modifié :'D");
 						conDataBase->Close();
 					}
@@ -462,79 +447,29 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 	}
 }
 private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
-	String^ constring = "Data Source=(local);Initial Catalog=POO;Integrated Security=True";
-	SqlConnection^ conDataBase = gcnew SqlConnection(constring);
 	if (textBox1->Text != "") {
-		CAD client;
-		CL_client Sclient;
-		Sclient.setID(Int32::Parse(textBox1->Text));
-		
-		client.requete(Sclient.AFFICHER());
+		NS_SVC::Gestion_Client^ client = gcnew NS_SVC::Gestion_Client;
+
+		client->afficherByID(Int32::Parse(textBox1->Text), textBox1, textBox2, textBox3, textBox4, textBox5, textBox6, textBox7, bindingSource2, dataGridView2);
 
 		dataGridView1->Hide();
 		dataGridView2->Show();
-
-		client.readClient(textBox1, textBox2, textBox3, textBox4, textBox5, textBox6, textBox7);
-
-		client.datagrid(Sclient.AFFICHER(), bindingSource2, dataGridView2);
 	}
 	else if(textBox2->Text != ""){
-		String^ Nom = textBox2->Text;
-		SqlCommand^ cmdDataBase = gcnew SqlCommand("SELECT * FROM Client WHERE Nom = '" + Nom + "' ", conDataBase);
+		NS_SVC::Gestion_Client^ client = gcnew NS_SVC::Gestion_Client;
 
-		conDataBase->Open();
-		SqlDataReader^ myReader = cmdDataBase->ExecuteReader();
+		client->afficherByNom(textBox2->Text, textBox1, textBox2, textBox3, textBox4, textBox5, textBox6, textBox7, bindingSource2, dataGridView2);
 
 		dataGridView1->Hide();
 		dataGridView2->Show();
-
-		while (myReader->Read()) {
-			textBox1->Text = Convert::ToString(myReader->GetInt32(0));
-			textBox2->Text = myReader->GetString(1);
-			textBox3->Text = myReader->GetString(2);
-			textBox4->Text = Convert::ToString(myReader->GetDateTime(3));
-			textBox5->Text = Convert::ToString(myReader->GetDateTime(4));
-			textBox6->Text = myReader->GetString(5);
-			textBox7->Text = myReader->GetString(6);
-
-		}
-
-		myReader->Close();
-		SqlDataAdapter^ adapter = gcnew SqlDataAdapter("SELECT * FROM Client WHERE Nom = '" + Nom + "' ", conDataBase);
-		DataTable^ data = gcnew DataTable();
-		data->Clear();
-		adapter->Fill(data);
-		bindingSource2->DataSource = data;
-		dataGridView2->DataSource = bindingSource2;
 	}
 	else if (textBox3->Text != "") {
-		String^ Prenom = textBox3->Text;
-		SqlCommand^ cmdDataBase = gcnew SqlCommand("SELECT * FROM Client WHERE Prenom = '" + Prenom + "' ", conDataBase);
+		NS_SVC::Gestion_Client^ client = gcnew NS_SVC::Gestion_Client;
 
-		conDataBase->Open();
-		SqlDataReader^ myReader = cmdDataBase->ExecuteReader();
-		conDataBase->Close();
+		client->afficherByPrenom(textBox2->Text, textBox1, textBox2, textBox3, textBox4, textBox5, textBox6, textBox7, bindingSource2, dataGridView2);
+
 		dataGridView1->Hide();
 		dataGridView2->Show();
-
-		while (myReader->Read()) {
-			textBox1->Text = Convert::ToString(myReader->GetInt32(0));
-			textBox2->Text = myReader->GetString(1);
-			textBox3->Text = myReader->GetString(2);
-			textBox4->Text = Convert::ToString(myReader->GetDateTime(3));
-			textBox5->Text = Convert::ToString(myReader->GetDateTime(4));
-			textBox6->Text = myReader->GetString(5);
-			textBox7->Text = myReader->GetString(6);
-
-		}
-
-		myReader->Close();
-		SqlDataAdapter^ adapter = gcnew SqlDataAdapter("SELECT * FROM Client WHERE Prenom = '" + Prenom + "' ", conDataBase);
-		DataTable^ data = gcnew DataTable();
-		data->Clear();
-		adapter->Fill(data);
-		bindingSource2->DataSource = data;
-		dataGridView2->DataSource = bindingSource2;
 	}
 	else {
 		MessageBox::Show("Vous devez introduire l'ID ou le Nom ou le Prénom d'un Client");
@@ -547,13 +482,10 @@ private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e
 	SqlConnection^ conDataBase = gcnew SqlConnection(constring);
 
 	if(textBox1->Text != ""){
-	int ID = Int32::Parse(textBox1->Text);
-	SqlCommand^ cmdDataBase = gcnew SqlCommand("DELETE FROM Client WHERE Id_Client = " + ID + " ", conDataBase);
+	NS_SVC::Gestion_Client^ client = gcnew NS_SVC::Gestion_Client;
 
-	conDataBase->Open();
-	SqlDataReader^ myReader = cmdDataBase->ExecuteReader();
+	client->supprimer(Int32::Parse(textBox1->Text));
 	MessageBox::Show("Client supprimé :'D");
-	conDataBase->Close();
 	}
 	else {
 		MessageBox::Show("Il faut remplir l'ID d'un Client");

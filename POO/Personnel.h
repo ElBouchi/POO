@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Gestion_Personnel.h"
+
 namespace POO {
 
 	using namespace System;
@@ -446,27 +448,18 @@ namespace POO {
 		SqlConnection^ conDataBase = gcnew SqlConnection(constring);
 
 		if (textBox1->Text != "" && textBox2->Text != "" && textBox3->Text != "" && textBox4->Text != "") {
-			String^ Nom = textBox1->Text;
-			String^ Prenom = textBox2->Text;
-			String^ Adresse = textBox4->Text;
-			String^ dateEmbauche = textBox3->Text;
+			if (radioButton1->Checked && textBox5->Text != "" && textBox6->Text != "") {
 
-			if (radioButton1->Checked) {
-				SqlCommand^ cmdDataBase = gcnew SqlCommand("INSERT INTO Personnel (Nom, Prenom, Adresse, Date_d_embauche, Supperieur_hierarchique) VALUES('" + Nom + "', '" + Prenom + "', '" + Adresse + "', '" + dateEmbauche + "', 1); ", conDataBase);
-				SqlDataReader^ myReader;
 				try {
 
-					conDataBase->Open();
-					myReader = cmdDataBase->ExecuteReader();
-					conDataBase->Close();
+					NS_SVC::Gestion_Personnel^ personnel = gcnew NS_SVC::Gestion_Personnel;
 
-					String^ NomP = textBox5->Text;
-					String^ PrenomP = textBox6->Text;
+					personnel->AjouterP(textBox1->Text, textBox2->Text, textBox4->Text, textBox3->Text);
 
 					if (textBox5->Text != "" && textBox6->Text != "") {
-						SqlCommand^ cmdDataBase = gcnew SqlCommand("UPDATE Personnel SET Id_Personnel_encadrer = (SELECT ID_Personnel FROM Personnel WHERE Nom = '" + NomP + "' AND Prenom = '" + PrenomP + "') WHERE Nom = '" + Nom + "' AND Prenom = '" + Prenom + "' ", conDataBase);
-						conDataBase->Open();
-						myReader = cmdDataBase->ExecuteReader();
+						NS_SVC::Gestion_Personnel^ personnel = gcnew NS_SVC::Gestion_Personnel;
+
+						personnel->ModifierAjouterP(textBox1->Text, textBox2->Text, textBox5->Text, textBox6->Text);
 						MessageBox::Show("Personnel enregistré :'D");
 					}
 					else {
@@ -481,12 +474,12 @@ namespace POO {
 			}
 			else {
 
-				SqlCommand^ cmdDataBase = gcnew SqlCommand("INSERT INTO Personnel (Nom, Prenom, Adresse, Date_d_embauche, Supperieur_hierarchique) VALUES('" + Nom + "', '" + Prenom + "', '" + Adresse + "', '" + dateEmbauche + "', 0); ", conDataBase);
-				SqlDataReader^ myReader;
 				try {
 
-					conDataBase->Open();
-					myReader = cmdDataBase->ExecuteReader();
+					NS_SVC::Gestion_Personnel^ personnel = gcnew NS_SVC::Gestion_Personnel;
+
+					personnel->Ajouter(textBox1->Text, textBox2->Text, textBox4->Text, textBox3->Text);
+
 					MessageBox::Show("Personnel enregistré :'D");
 				}
 				catch (Exception^ ex) {
@@ -507,29 +500,18 @@ namespace POO {
 
 		if (textBox1->Text != "" && textBox2->Text != "" && textBox3->Text != "" && textBox4->Text != "") {
 			if (radioButton1->Checked) {
-
-				int ID = Int32::Parse(textBox7->Text);
-				String^ Nom = textBox1->Text;
-				String^ Prenom = textBox2->Text;
-				String^ Adresse = textBox4->Text;
-				String^ dateEmbauche = textBox3->Text;
-
-				SqlCommand^ cmdDataBase = gcnew SqlCommand("UPDATE Personnel SET Nom = '" + Nom + "', Prenom = '" + Prenom + "' , Adresse = '" + Adresse + "', Date_d_embauche = '" + dateEmbauche + "', Supperieur_hierarchique = 1 WHERE Id_Personnel = " + ID + " ", conDataBase);
-				SqlDataReader^ myReader;
-
 				try {
 
-					conDataBase->Open();
-					myReader = cmdDataBase->ExecuteReader();
-					conDataBase->Close();
+					NS_SVC::Gestion_Personnel^ personnel = gcnew NS_SVC::Gestion_Personnel;
 
-					String^ NomP = textBox5->Text;
-					String^ PrenomP = textBox6->Text;
+					personnel->ModifierP(Int32::Parse(textBox7->Text), textBox1->Text, textBox2->Text, textBox4->Text, textBox3->Text);
+
+
 
 					if (textBox5->Text != "" && textBox6->Text != "") {
-						SqlCommand^ cmdDataBase = gcnew SqlCommand("UPDATE Personnel SET Id_Personnel_encadrer = (SELECT ID_Personnel FROM Personnel WHERE Nom = '" + NomP + "' AND Prenom = '" + PrenomP + "') WHERE Nom = '" + Nom + "' AND Prenom = '" + Prenom + "' ", conDataBase);
-						conDataBase->Open();
-						myReader = cmdDataBase->ExecuteReader();
+						NS_SVC::Gestion_Personnel^ personnel = gcnew NS_SVC::Gestion_Personnel;
+
+						personnel->ModifierModifierP(textBox1->Text, textBox2->Text, textBox5->Text, textBox6->Text);
 
 						MessageBox::Show("Personnel modifié :'D");
 					}
@@ -544,20 +526,11 @@ namespace POO {
 				}
 			}
 			else {
-				int ID = Int32::Parse(textBox7->Text);
-				String^ Nom = textBox1->Text;
-				String^ Prenom = textBox2->Text;
-				String^ Adresse = textBox4->Text;
-				String^ dateEmbauche = textBox3->Text;
-
-				SqlCommand^ cmdDataBase = gcnew SqlCommand("UPDATE Personnel SET Nom = '" + Nom + "', Prenom = '" + Prenom + "' , Adresse = '" + Adresse + "', Date_d_embauche = '" + dateEmbauche + "', Supperieur_hierarchique = 0, Id_Personnel_encadrer = NULL WHERE Id_Personnel = " + ID + " ", conDataBase);
-				SqlDataReader^ myReader;
-
 				try {
+					NS_SVC::Gestion_Personnel^ personnel = gcnew NS_SVC::Gestion_Personnel;
 
-					conDataBase->Open();
-					myReader = cmdDataBase->ExecuteReader();
-					conDataBase->Close();
+					personnel->Modifier(Int32::Parse(textBox7->Text), textBox1->Text, textBox2->Text, textBox4->Text, textBox3->Text);
+
 					MessageBox::Show("Personnel modifié :'D");
 
 				}
@@ -579,33 +552,15 @@ namespace POO {
 		radioButton2->Checked = true;
 
 		if (textBox7->Text != "") {
-			int ID = Int32::Parse(textBox7->Text);
-			SqlCommand^ cmdDataBase = gcnew SqlCommand("SELECT * FROM Personnel WHERE Id_Personnel = " + ID + " ", conDataBase);
+			NS_SVC::Gestion_Personnel^ personnel = gcnew NS_SVC::Gestion_Personnel;
 
-			conDataBase->Open();
-			SqlDataReader^ myReader = cmdDataBase->ExecuteReader();
+			personnel->AfficherByID(Int32::Parse(textBox7->Text),textBox7,textBox1,textBox2,textBox4,textBox3,textBox8,bindingSource2,dataGridView2);
 
 			dataGridView1->Hide();
 			dataGridView2->Show();
 
-			while (myReader->Read()) {
-				textBox1->Text = myReader->GetString(1);
-				textBox2->Text = myReader->GetString(2);
-				textBox4->Text = myReader->GetString(3);
-				textBox3->Text = Convert::ToString(myReader->GetDateTime(4));
-				textBox8->Text = Convert::ToString(myReader->GetBoolean(5));
-			}
-
-			myReader->Close();
-			SqlDataAdapter^ adapter = gcnew SqlDataAdapter("SELECT * FROM Personnel WHERE Id_Personnel = " + ID + " ", conDataBase);
-			DataTable^ data = gcnew DataTable();
-			data->Clear();
-			adapter->Fill(data);
-			bindingSource2->DataSource = data;
-			dataGridView2->DataSource = bindingSource2;
-			myReader->Close();
-
 			if (textBox8->Text == "True") {
+				conDataBase->Open();
 
 				int ID = Int32::Parse(textBox7->Text);
 				SqlCommand^ cmdDataBase1 = gcnew SqlCommand("SELECT * FROM Personnel WHERE Id_Personnel = " + ID + " ", conDataBase);
@@ -633,34 +588,16 @@ namespace POO {
 			}
 		}
 		else if (textBox1->Text != "") {
-			String^ Nom = textBox1->Text;
-			SqlCommand^ cmdDataBase = gcnew SqlCommand("SELECT * FROM Personnel WHERE Nom = '" + Nom + "' ", conDataBase);
+			NS_SVC::Gestion_Personnel^ personnel = gcnew NS_SVC::Gestion_Personnel;
 
-			conDataBase->Open();
-			SqlDataReader^ myReader = cmdDataBase->ExecuteReader();
+			personnel->AfficherByNom(textBox1->Text, textBox7, textBox1, textBox2, textBox4, textBox3, textBox8, bindingSource2, dataGridView2);
 
 			dataGridView1->Hide();
 			dataGridView2->Show();
 
-			while (myReader->Read()) {
-				textBox7->Text = Convert::ToString(myReader->GetInt32(0));
-				textBox1->Text = myReader->GetString(1);
-				textBox2->Text = myReader->GetString(2);
-				textBox4->Text = myReader->GetString(3);
-				textBox3->Text = Convert::ToString(myReader->GetDateTime(4));
-				textBox8->Text = Convert::ToString(myReader->GetBoolean(5));
-			}
-
-			myReader->Close();
-			SqlDataAdapter^ adapter = gcnew SqlDataAdapter("SELECT * FROM Personnel WHERE Nom = '" + Nom + "' ", conDataBase);
-			DataTable^ data = gcnew DataTable();
-			data->Clear();
-			adapter->Fill(data);
-			bindingSource2->DataSource = data;
-			dataGridView2->DataSource = bindingSource2;
-			myReader->Close();
-
 			if (textBox8->Text == "True") {
+
+				conDataBase->Open();
 
 				int ID = Int32::Parse(textBox7->Text);
 				SqlCommand^ cmdDataBase1 = gcnew SqlCommand("SELECT * FROM Personnel WHERE Id_Personnel = " + ID + " ", conDataBase);
@@ -687,34 +624,15 @@ namespace POO {
 
 			}
 		} else if(textBox2->Text != ""){
-			String^ Prenom = textBox2->Text;
-			SqlCommand^ cmdDataBase = gcnew SqlCommand("SELECT * FROM Personnel WHERE Prenom = '" + Prenom + "' ", conDataBase);
 
-			conDataBase->Open();
-			SqlDataReader^ myReader = cmdDataBase->ExecuteReader();
+			NS_SVC::Gestion_Personnel^ personnel = gcnew NS_SVC::Gestion_Personnel;
+
+			personnel->AfficherByPrenom(textBox2->Text, textBox7, textBox1, textBox2, textBox4, textBox3, textBox8, bindingSource2, dataGridView2);
 
 			dataGridView1->Hide();
 			dataGridView2->Show();
-
-			while (myReader->Read()) {
-				textBox7->Text = Convert::ToString(myReader->GetInt32(0));
-				textBox1->Text = myReader->GetString(1);
-				textBox2->Text = myReader->GetString(2);
-				textBox4->Text = myReader->GetString(3);
-				textBox3->Text = Convert::ToString(myReader->GetDateTime(4));
-				textBox8->Text = Convert::ToString(myReader->GetBoolean(5));
-			}
-
-			myReader->Close();
-			SqlDataAdapter^ adapter = gcnew SqlDataAdapter("SELECT * FROM Personnel WHERE Prenom = '" + Prenom + "' ", conDataBase);
-			DataTable^ data = gcnew DataTable();
-			data->Clear();
-			adapter->Fill(data);
-			bindingSource2->DataSource = data;
-			dataGridView2->DataSource = bindingSource2;
-			myReader->Close();
-
 			if (textBox8->Text == "True") {
+				conDataBase->Open();
 
 				int ID = Int32::Parse(textBox7->Text);
 				SqlCommand^ cmdDataBase1 = gcnew SqlCommand("SELECT * FROM Personnel WHERE Id_Personnel = " + ID + " ", conDataBase);
@@ -753,17 +671,14 @@ private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e
 		SqlConnection^ conDataBase = gcnew SqlConnection(constring);
 
 		if (textBox7->Text != "") {
-
 			int ID = Int32::Parse(textBox7->Text);
-
 			if (MessageBox::Show("Etes-vous sûr de vouloir supprimer le personnel avec l'id " + ID + " ?", "Warning", MessageBoxButtons::YesNo, MessageBoxIcon::Question) == System::Windows::Forms::DialogResult::Yes) {
-				SqlCommand^ cmdDataBase = gcnew SqlCommand("DELETE FROM Personnel WHERE Id_Personnel = " + ID + " ", conDataBase);
 
-				conDataBase->Open();
-				SqlDataReader^ myReader = cmdDataBase->ExecuteReader();
+				NS_SVC::Gestion_Personnel^ personnel = gcnew NS_SVC::Gestion_Personnel;
+
+				personnel->Supprimer(Int32::Parse(textBox7->Text));
+				
 				MessageBox::Show("Personnel supprimé :'D");
-				conDataBase->Close();
-
 			}
 			else {
 				MessageBox::Show("Personnel non supprimé");
