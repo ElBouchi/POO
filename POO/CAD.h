@@ -87,6 +87,11 @@ namespace NS_Composants
 			}
 			this->READ->Close();
 		}
+		void close() {
+			while (this->READ->Read()) {
+			}
+			this->READ->Close();
+		}
 		void datagrid(System::String^ rq_sql, System::Windows::Forms::BindingSource^ bindingsource, System::Windows::Forms::DataGridView^ datagridview) {
 			this->setSQL(rq_sql);
 			TAB->Clear();

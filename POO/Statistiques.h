@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Simulation.h"
+#include "Gestion_Statistiques.h"
 
 namespace POO {
 
@@ -49,7 +50,7 @@ namespace POO {
 	private: System::Windows::Forms::TextBox^ textBox1;
 	private: System::Windows::Forms::BindingSource^ bindingSource1;
 	private: System::Windows::Forms::BindingSource^ bindingSource2;
-	private: System::Windows::Forms::DataGridView^ dataGridView2;
+
 	private: System::Windows::Forms::Button^ button8;
 	private: System::Windows::Forms::Button^ button9;
 	private: System::ComponentModel::IContainer^ components;
@@ -82,14 +83,12 @@ namespace POO {
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->bindingSource1 = (gcnew System::Windows::Forms::BindingSource(this->components));
 			this->bindingSource2 = (gcnew System::Windows::Forms::BindingSource(this->components));
-			this->dataGridView2 = (gcnew System::Windows::Forms::DataGridView());
 			this->button8 = (gcnew System::Windows::Forms::Button());
 			this->button9 = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->bindingSource1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->bindingSource2))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView2))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// dataGridView1
@@ -184,14 +183,6 @@ namespace POO {
 			this->textBox1->Size = System::Drawing::Size(56, 20);
 			this->textBox1->TabIndex = 9;
 			// 
-			// dataGridView2
-			// 
-			this->dataGridView2->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-			this->dataGridView2->Location = System::Drawing::Point(337, 54);
-			this->dataGridView2->Name = L"dataGridView2";
-			this->dataGridView2->Size = System::Drawing::Size(471, 386);
-			this->dataGridView2->TabIndex = 10;
-			// 
 			// button8
 			// 
 			this->button8->Location = System::Drawing::Point(439, 20);
@@ -219,7 +210,6 @@ namespace POO {
 			this->ClientSize = System::Drawing::Size(841, 547);
 			this->Controls->Add(this->button9);
 			this->Controls->Add(this->button8);
-			this->Controls->Add(this->dataGridView2);
 			this->Controls->Add(this->textBox1);
 			this->Controls->Add(this->numericUpDown1);
 			this->Controls->Add(this->button7);
@@ -238,7 +228,6 @@ namespace POO {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown1))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->bindingSource1))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->bindingSource2))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView2))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -250,111 +239,51 @@ private: System::Void Statistiques_Load(System::Object^ sender, System::EventArg
 }
 
 private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-	String^ constring = "Data Source=(local);Initial Catalog=POO;Integrated Security=True";
-	SqlConnection^ conDataBase = gcnew SqlConnection(constring);
+	NS_SVC::Gestion_Statistiques^ statistiques = gcnew NS_SVC::Gestion_Statistiques;
 
-	SqlDataAdapter^ adapter = gcnew SqlDataAdapter("SELECT (SUM(Quantité_article * (Montant_TTC - (Montant_TTC * Remise/100)))/COUNT(DISTINCT([commande].reference_commande))) AS Panier_Moyen FROM Contient, Article, Commande WHERE[Contient].reference_article = [Article].reference_article AND[Commande].reference_commande = [Contient].reference_commande", conDataBase);
-	DataTable^ data = gcnew DataTable();
-	dataGridView2->Hide();
-	dataGridView1->Show();
-	adapter->Fill(data);
-	bindingSource1->DataSource = data;
-	dataGridView1->DataSource = bindingSource1;
+	statistiques->Panier(bindingSource1, dataGridView1);
 }
 private: System::Void button8_Click(System::Object^ sender, System::EventArgs^ e) {
-	String^ constring = "Data Source=(local);Initial Catalog=POO;Integrated Security=True";
-	SqlConnection^ conDataBase = gcnew SqlConnection(constring);
+	NS_SVC::Gestion_Statistiques^ statistiques = gcnew NS_SVC::Gestion_Statistiques;
 
-	SqlDataAdapter^ adapter = gcnew SqlDataAdapter("SELECT * FROM Client", conDataBase);
-	DataTable^ data = gcnew DataTable();
-	dataGridView1->Hide();
-	dataGridView2->Show();
-	adapter->Fill(data);
-	bindingSource2->DataSource = data;
-	dataGridView2->DataSource = bindingSource2;
+	statistiques->AffTout(bindingSource1, dataGridView1);
 }
 private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
-	String^ constring = "Data Source=(local);Initial Catalog=POO;Integrated Security=True";
-	SqlConnection^ conDataBase = gcnew SqlConnection(constring);
+	NS_SVC::Gestion_Statistiques^ statistiques = gcnew NS_SVC::Gestion_Statistiques;
 
-	SqlDataAdapter^ adapter = gcnew SqlDataAdapter("SELECT reference_article, designation FROM Article WHERE seuil_de_reapprovisionnement > Quantite", conDataBase);
-	DataTable^ data = gcnew DataTable();
-	dataGridView2->Hide();
-	dataGridView1->Show();
-	adapter->Fill(data);
-	bindingSource1->DataSource = data;
-	dataGridView1->DataSource = bindingSource1;
+	statistiques->Seuil(bindingSource1, dataGridView1);
 }
 
 private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e) {
-	String^ constring = "Data Source=(local);Initial Catalog=POO;Integrated Security=True";
-	SqlConnection^ conDataBase = gcnew SqlConnection(constring);
+	NS_SVC::Gestion_Statistiques^ statistiques = gcnew NS_SVC::Gestion_Statistiques;
 
-	SqlDataAdapter^ adapter = gcnew SqlDataAdapter("SELECT designation, [Contient].reference_article, SUM(Quantité_article) AS Quantité FROM Contient, Article WHERE[Contient].reference_article = [Article].reference_article GROUP BY[Contient].reference_article, designation ORDER BY Quantité DESC ", conDataBase);
-	DataTable^ data = gcnew DataTable();
-	dataGridView2->Hide();
-	dataGridView1->Show();
-	adapter->Fill(data);
-	bindingSource1->DataSource = data;
-	dataGridView1->DataSource = bindingSource1;
+	statistiques->pVendus(bindingSource1, dataGridView1);
 }
 private: System::Void button6_Click(System::Object^ sender, System::EventArgs^ e) {
-	String^ constring = "Data Source=(local);Initial Catalog=POO;Integrated Security=True";
-	SqlConnection^ conDataBase = gcnew SqlConnection(constring);
+	NS_SVC::Gestion_Statistiques^ statistiques = gcnew NS_SVC::Gestion_Statistiques;
 
-	SqlDataAdapter^ adapter = gcnew SqlDataAdapter("SELECT designation, [Contient].reference_article, SUM(Quantité_article) AS Quantité FROM Contient, Article WHERE[Contient].reference_article = [Article].reference_article GROUP BY[Contient].reference_article, designation ORDER BY Quantité ASC ", conDataBase);
-	DataTable^ data = gcnew DataTable();
-	dataGridView2->Hide();
-	dataGridView1->Show();
-	adapter->Fill(data);
-	bindingSource1->DataSource = data;
-	dataGridView1->DataSource = bindingSource1;
+	statistiques->mVendus(bindingSource1, dataGridView1);
 }
 private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
-	String^ constring = "Data Source=(local);Initial Catalog=POO;Integrated Security=True";
-	SqlConnection^ conDataBase = gcnew SqlConnection(constring);
+	NS_SVC::Gestion_Statistiques^ statistiques = gcnew NS_SVC::Gestion_Statistiques;
 
-	int mois = Int32::Parse(numericUpDown1->Text);
-
-	SqlDataAdapter^ adapter = gcnew SqlDataAdapter("SELECT (SUM(Quantité_article * (Montant_TTC - (Montant_TTC * Remise/100)))) AS Chiffre_Affaire FROM Contient, Article, Commande WHERE[Contient].reference_article = [Article].reference_article AND[Commande].reference_commande = [Contient].reference_commande AND MONTH(Date_d_emission) = "+mois+" ", conDataBase);
-	DataTable^ data = gcnew DataTable();
-	dataGridView2->Hide();
-	dataGridView1->Show();
-	adapter->Fill(data);
-	bindingSource1->DataSource = data;
-	dataGridView1->DataSource = bindingSource1;
+	statistiques->ChiffreAff(Int32::Parse(numericUpDown1->Text), bindingSource1, dataGridView1);
 }
 private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
-	String^ constring = "Data Source=(local);Initial Catalog=POO;Integrated Security=True";
-	SqlConnection^ conDataBase = gcnew SqlConnection(constring);
-
 	if (textBox1->Text != "") {
 
-		int ID = Int32::Parse(textBox1->Text);
+		NS_SVC::Gestion_Statistiques^ statistiques = gcnew NS_SVC::Gestion_Statistiques;
 
-		SqlDataAdapter^ adapter = gcnew SqlDataAdapter("SELECT SUM(Montant_total_TTC) AS Montant_Total_Achats FROM Commande WHERE Id_Client = " + ID + " ", conDataBase);
-		DataTable^ data = gcnew DataTable();
-		dataGridView2->Hide();
-		dataGridView1->Show();
-		adapter->Fill(data);
-		bindingSource1->DataSource = data;
-		dataGridView1->DataSource = bindingSource1;
+		statistiques->TotalAchat(Int32::Parse(textBox1->Text), bindingSource1, dataGridView1);
 	}
 	else {
 		MessageBox::Show("Il faut entrer un ID");
 	}
 }
 private: System::Void button7_Click(System::Object^ sender, System::EventArgs^ e) {
-	String^ constring = "Data Source=(local);Initial Catalog=POO;Integrated Security=True";
-	SqlConnection^ conDataBase = gcnew SqlConnection(constring);
+	NS_SVC::Gestion_Statistiques^ statistiques = gcnew NS_SVC::Gestion_Statistiques;
 
-	SqlDataAdapter^ adapter = gcnew SqlDataAdapter("SELECT SUM(Montant_HT * Quantite) - SUM((Montant_HT * 0.2) * Quantite) AS Valeur_Achat_Stock FROM Article ", conDataBase);
-	DataTable^ data = gcnew DataTable();
-	dataGridView2->Hide();
-	dataGridView1->Show();
-	adapter->Fill(data);
-	bindingSource1->DataSource = data;
-	dataGridView1->DataSource = bindingSource1;
+	statistiques->ValeurAchat(bindingSource1, dataGridView1);
 }
 private: System::Void button9_Click(System::Object^ sender, System::EventArgs^ e) {
 	Simulation^ a = gcnew Simulation;

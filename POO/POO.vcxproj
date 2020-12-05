@@ -124,12 +124,14 @@
     <ClCompile Include="CL_Commande.cpp" />
     <ClCompile Include="CL_Contient.cpp" />
     <ClCompile Include="CL_Personnel.cpp" />
+    <ClCompile Include="CL_Statistiques.cpp" />
     <ClCompile Include="CL_Stock.cpp" />
     <ClCompile Include="Commande.cpp" />
     <ClCompile Include="Gestion_Client.cpp" />
     <ClCompile Include="Gestion_Commande.cpp" />
     <ClCompile Include="Gestion_Contient.cpp" />
     <ClCompile Include="Gestion_Personnel.cpp" />
+    <ClCompile Include="Gestion_Statistiques.cpp" />
     <ClCompile Include="Gestion_Stock.cpp" />
     <ClCompile Include="MyForm.cpp" />
     <ClCompile Include="MyForm1.cpp" />
@@ -149,6 +151,7 @@
     <ClInclude Include="CL_Commande.h" />
     <ClInclude Include="CL_Contient.h" />
     <ClInclude Include="CL_Personnel.h" />
+    <ClInclude Include="CL_Statistiques.h" />
     <ClInclude Include="CL_Stock.h" />
     <ClInclude Include="Commande.h">
       <FileType>CppForm</FileType>
@@ -157,6 +160,7 @@
     <ClInclude Include="Gestion_Commande.h" />
     <ClInclude Include="Gestion_Contient.h" />
     <ClInclude Include="Gestion_Personnel.h" />
+    <ClInclude Include="Gestion_Statistiques.h" />
     <ClInclude Include="Gestion_Stock.h" />
     <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>
