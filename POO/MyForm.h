@@ -4,6 +4,7 @@
 #include "Client.h"
 #include "Personnel.h"
 #include "Commande.h"
+#include "Statistiques.h"
 
 namespace POO {
 
@@ -128,6 +129,7 @@ namespace POO {
 			this->button5->TabIndex = 4;
 			this->button5->Text = L"Gestion Statistiques";
 			this->button5->UseVisualStyleBackColor = true;
+			this->button5->Click += gcnew System::EventHandler(this, &MyForm::button5_Click);
 			// 
 			// label1
 			// 
@@ -177,7 +179,7 @@ namespace POO {
 			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->MaximizeBox = false;
 			this->Name = L"MyForm";
-			this->Text = L"MainForm";
+			this->Text = L"Accueil";
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -198,6 +200,10 @@ private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e
 private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
 	Commande^ k = gcnew Commande;
 	k->Show();
+}
+private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e) {
+	Statistiques^ f = gcnew Statistiques;
+	f->Show();
 }
 };
 }

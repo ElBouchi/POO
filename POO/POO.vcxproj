@@ -136,6 +136,8 @@
     <ClCompile Include="Panier.cpp" />
     <ClCompile Include="Personnel.cpp" />
     <ClCompile Include="Qtarticle.cpp" />
+    <ClCompile Include="Simulation.cpp" />
+    <ClCompile Include="Statistiques.cpp" />
     <ClCompile Include="Subclient.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -171,6 +173,12 @@
     <ClInclude Include="Qtarticle.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="Simulation.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="Statistiques.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="Subclient.h">
       <FileType>CppForm</FileType>
     </ClInclude>
@@ -196,6 +204,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Qtarticle.resx">
       <DependentUpon>Qtarticle.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Simulation.resx">
+      <DependentUpon>Simulation.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Statistiques.resx">
+      <DependentUpon>Statistiques.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Subclient.resx">
       <DependentUpon>Subclient.h</DependentUpon>
